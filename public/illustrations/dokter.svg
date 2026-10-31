@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320" role="img" aria-label="Ilustrasi Profesi Dokter">
+  <defs>
+    <linearGradient id="bgDokter" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#dbeafe"/>
+      <stop offset="100%" stop-color="#bfdbfe"/>
+    </linearGradient>
+    <linearGradient id="coatDokter" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f1f5f9"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="320" rx="28" fill="url(#bgDokter)"/>
+  <circle cx="330" cy="60" r="45" fill="#93c5fd" opacity="0.4"/>
+  <circle cx="65" cy="255" r="55" fill="#60a5fa" opacity="0.25"/>
+  <!-- Medical Cross Badge -->
+  <g transform="translate(42, 36)">
+    <rect width="54" height="54" rx="14" fill="#2563eb"/>
+    <path d="M23 14h8v9h9v8h-9v9h-8v-9h-9v-8h9z" fill="#ffffff"/>
+  </g>
+  <!-- Clipboard / Chart in background -->
+  <g transform="translate(275, 130) rotate(6)">
+    <rect width="80" height="105" rx="10" fill="#1e40af" opacity="0.12"/>
+    <rect x="6" y="8" width="68" height="90" rx="6" fill="#ffffff"/>
+    <rect x="24" y="2" width="32" height="10" rx="4" fill="#3b82f6"/>
+    <path d="M16 32h48M16 46h36M16 60h44" stroke="#93c5fd" stroke-width="4" stroke-linecap="round"/>
+    <path d="M16 78l10-10 8 8 16-16" stroke="#2563eb" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <!-- Character Body / Scrubs & White Coat -->
+  <path d="M110 320 C110 235 145 210 200 210 C255 210 290 235 290 320 Z" fill="#2563eb"/>
+  <path d="M115 320 C118 240 150 212 182 212 L192 320 Z" fill="url(#coatDokter)"/>
+  <path d="M285 320 C282 240 250 212 218 212 L208 320 Z" fill="url(#coatDokter)"/>
+  <!-- Coat Lapels -->
+  <path d="M170 212 L195 270 L160 270 Z" fill="#e2e8f0"/>
+  <path d="M230 212 L205 270 L240 270 Z" fill="#e2e8f0"/>
+  <!-- Neck & Head -->
+  <rect x="184" y="176" width="32" height="42" rx="12" fill="#f5d0b5"/>
+  <circle cx="200" cy="132" r="48" fill="#f5d0b5"/>
+  <!-- Hair -->
+  <path d="M150 128 C148 86 178 72 205 74 C235 76 254 96 248 130 C242 108 225 98 198 98 C172 98 158 110 150 128 Z" fill="#1e293b"/>
+  <!-- Glasses & Face -->
+  <rect x="168" y="120" width="26" height="18" rx="6" fill="none" stroke="#1e3a8a" stroke-width="3.5"/>
+  <rect x="206" y="120" width="26" height="18" rx="6" fill="none" stroke="#1e3a8a" stroke-width="3.5"/>
+  <line x1="194" y1="128" x2="206" y2="128" stroke="#1e3a8a" stroke-width="3.5"/>
+  <circle cx="181" cy="129" r="3.5" fill="#0f172a"/>
+  <circle cx="219" cy="129" r="3.5" fill="#0f172a"/>
+  <path d="M188 152 Q200 162 212 152" fill="none" stroke="#b45309" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- Stethoscope -->
+  <path d="M168 205 C152 230 155 268 178 282" fill="none" stroke="#0f172a" stroke-width="6" stroke-linecap="round"/>
+  <path d="M232 205 C248 230 245 265 228 275" fill="none" stroke="#0f172a" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="178" cy="285" r="11" fill="#3b82f6" stroke="#0f172a" stroke-width="4"/>
+  <circle cx="178" cy="285" r="4" fill="#ffffff"/>
+</svg>
+

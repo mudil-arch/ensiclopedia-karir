@@ -1,0 +1,186 @@
+import { AccentColorKey } from "@/types/career";
+
+export interface ThemeTokens {
+  label: string;
+  hexPrimary: string;
+  bgSoft: string;
+  bgHeader: string;
+  textPrimary: string;
+  textSecondary: string;
+  borderSoft: string;
+  borderAccent: string;
+  badgeBg: string;
+  badgeText: string;
+  buttonBg: string;
+  buttonHover: string;
+  ringColor: string;
+  gradientCard: string;
+}
+
+export const ACCENT_THEMES: Record<AccentColorKey, ThemeTokens> = {
+  blue: {
+    label: "Biru (Medis & Analitis)",
+    hexPrimary: "#2563eb",
+    bgSoft: "bg-blue-50/80",
+    bgHeader: "bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800",
+    textPrimary: "text-blue-700",
+    textSecondary: "text-blue-900",
+    borderSoft: "border-blue-100",
+    borderAccent: "border-blue-500",
+    badgeBg: "bg-blue-100",
+    badgeText: "text-blue-800",
+    buttonBg: "bg-blue-600",
+    buttonHover: "hover:bg-blue-700",
+    ringColor: "focus-visible:outline-blue-600",
+    gradientCard: "from-blue-500/10 via-blue-50/40 to-white",
+  },
+  pink: {
+    label: "Merah Muda (Kepedulian & Asuhan)",
+    hexPrimary: "#db2777",
+    bgSoft: "bg-pink-50/80",
+    bgHeader: "bg-gradient-to-br from-pink-600 via-rose-600 to-pink-800",
+    textPrimary: "text-pink-700",
+    textSecondary: "text-pink-900",
+    borderSoft: "border-pink-100",
+    borderAccent: "border-pink-500",
+    badgeBg: "bg-pink-100",
+    badgeText: "text-pink-800",
+    buttonBg: "bg-pink-600",
+    buttonHover: "hover:bg-pink-700",
+    ringColor: "focus-visible:outline-pink-600",
+    gradientCard: "from-pink-500/10 via-pink-50/40 to-white",
+  },
+  green: {
+    label: "Hijau (Farmasi, Sains & Lingkungan)",
+    hexPrimary: "#059669",
+    bgSoft: "bg-emerald-50/80",
+    bgHeader: "bg-gradient-to-br from-emerald-600 via-teal-700 to-emerald-800",
+    textPrimary: "text-emerald-700",
+    textSecondary: "text-emerald-900",
+    borderSoft: "border-emerald-100",
+    borderAccent: "border-emerald-500",
+    badgeBg: "bg-emerald-100",
+    badgeText: "text-emerald-800",
+    buttonBg: "bg-emerald-600",
+    buttonHover: "hover:bg-emerald-700",
+    ringColor: "focus-visible:outline-emerald-600",
+    gradientCard: "from-emerald-500/10 via-emerald-50/40 to-white",
+  },
+  purple: {
+    label: "Ungu (Pendampingan & Kreatif)",
+    hexPrimary: "#7c3aed",
+    bgSoft: "bg-purple-50/80",
+    bgHeader: "bg-gradient-to-br from-purple-600 via-violet-700 to-purple-900",
+    textPrimary: "text-purple-700",
+    textSecondary: "text-purple-900",
+    borderSoft: "border-purple-100",
+    borderAccent: "border-purple-500",
+    badgeBg: "bg-purple-100",
+    badgeText: "text-purple-800",
+    buttonBg: "bg-purple-600",
+    buttonHover: "hover:bg-purple-700",
+    ringColor: "focus-visible:outline-purple-600",
+    gradientCard: "from-purple-500/10 via-purple-50/40 to-white",
+  },
+  amber: {
+    label: "Kuning Amber (Pendidikan & Sosial)",
+    hexPrimary: "#d97706",
+    bgSoft: "bg-amber-50/80",
+    bgHeader: "bg-gradient-to-br from-amber-600 via-orange-600 to-amber-800",
+    textPrimary: "text-amber-800",
+    textSecondary: "text-amber-950",
+    borderSoft: "border-amber-100",
+    borderAccent: "border-amber-500",
+    badgeBg: "bg-amber-100",
+    badgeText: "text-amber-900",
+    buttonBg: "bg-amber-600",
+    buttonHover: "hover:bg-amber-700",
+    ringColor: "focus-visible:outline-amber-600",
+    gradientCard: "from-amber-500/10 via-amber-50/40 to-white",
+  },
+  indigo: {
+    label: "Indigo (Teknologi & Digital)",
+    hexPrimary: "#4f46e5",
+    bgSoft: "bg-indigo-50/80",
+    bgHeader: "bg-gradient-to-br from-indigo-600 via-blue-700 to-slate-900",
+    textPrimary: "text-indigo-700",
+    textSecondary: "text-indigo-900",
+    borderSoft: "border-indigo-100",
+    borderAccent: "border-indigo-500",
+    badgeBg: "bg-indigo-100",
+    badgeText: "text-indigo-800",
+    buttonBg: "bg-indigo-600",
+    buttonHover: "hover:bg-indigo-700",
+    ringColor: "focus-visible:outline-indigo-600",
+    gradientCard: "from-indigo-500/10 via-indigo-50/40 to-white",
+  },
+  teal: {
+    label: "Teal (Bisnis & Manajemen)",
+    hexPrimary: "#0d9488",
+    bgSoft: "bg-teal-50/80",
+    bgHeader: "bg-gradient-to-br from-teal-600 via-cyan-700 to-slate-800",
+    textPrimary: "text-teal-700",
+    textSecondary: "text-teal-900",
+    borderSoft: "border-teal-100",
+    borderAccent: "border-teal-500",
+    badgeBg: "bg-teal-100",
+    badgeText: "text-teal-800",
+    buttonBg: "bg-teal-600",
+    buttonHover: "hover:bg-teal-700",
+    ringColor: "focus-visible:outline-teal-600",
+    gradientCard: "from-teal-500/10 via-teal-50/40 to-white",
+  },
+  orange: {
+    label: "Oranye (Teknik & Industri)",
+    hexPrimary: "#ea580c",
+    bgSoft: "bg-orange-50/80",
+    bgHeader: "bg-gradient-to-br from-orange-600 via-amber-700 to-slate-900",
+    textPrimary: "text-orange-700",
+    textSecondary: "text-orange-900",
+    borderSoft: "border-orange-100",
+    borderAccent: "border-orange-500",
+    badgeBg: "bg-orange-100",
+    badgeText: "text-orange-800",
+    buttonBg: "bg-orange-600",
+    buttonHover: "hover:bg-orange-700",
+    ringColor: "focus-visible:outline-orange-600",
+    gradientCard: "from-orange-500/10 via-orange-50/40 to-white",
+  },
+  cyan: {
+    label: "Sian (Transportasi & Logistik)",
+    hexPrimary: "#0891b2",
+    bgSoft: "bg-cyan-50/80",
+    bgHeader: "bg-gradient-to-br from-cyan-600 via-sky-700 to-slate-900",
+    textPrimary: "text-cyan-700",
+    textSecondary: "text-cyan-900",
+    borderSoft: "border-cyan-100",
+    borderAccent: "border-cyan-500",
+    badgeBg: "bg-cyan-100",
+    badgeText: "text-cyan-800",
+    buttonBg: "bg-cyan-600",
+    buttonHover: "hover:bg-cyan-700",
+    ringColor: "focus-visible:outline-cyan-600",
+    gradientCard: "from-cyan-500/10 via-cyan-50/40 to-white",
+  },
+  rose: {
+    label: "Rose (Pariwisata & Pelayanan)",
+    hexPrimary: "#e11d48",
+    bgSoft: "bg-rose-50/80",
+    bgHeader: "bg-gradient-to-br from-rose-600 via-pink-700 to-rose-900",
+    textPrimary: "text-rose-700",
+    textSecondary: "text-rose-900",
+    borderSoft: "border-rose-100",
+    borderAccent: "border-rose-500",
+    badgeBg: "bg-rose-100",
+    badgeText: "text-rose-800",
+    buttonBg: "bg-rose-600",
+    buttonHover: "hover:bg-rose-700",
+    ringColor: "focus-visible:outline-rose-600",
+    gradientCard: "from-rose-500/10 via-rose-50/40 to-white",
+  },
+};
+
+export function getAccentTheme(color?: AccentColorKey): ThemeTokens {
+  return ACCENT_THEMES[color || "blue"] || ACCENT_THEMES.blue;
+}
+

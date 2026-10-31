@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320" role="img" aria-label="Ilustrasi Eksplorasi Profesi">
+  <defs>
+    <linearGradient id="bgDefault" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e0e7ff"/>
+      <stop offset="100%" stop-color="#c7d2fe"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="320" rx="28" fill="url(#bgDefault)"/>
+  <circle cx="325" cy="65" r="45" fill="#818cf8" opacity="0.3"/>
+  <circle cx="70" cy="250" r="55" fill="#6366f1" opacity="0.2"/>
+  <g transform="translate(42, 36)">
+    <rect width="54" height="54" rx="14" fill="#4f46e5"/>
+    <path d="M27 14 L31 23 L41 24 L33 31 L35 40 L27 35 L19 40 L21 31 L13 24 L23 23 Z" fill="#ffffff"/>
+  </g>
+  <path d="M115 320 C115 235 150 210 200 210 C250 210 285 235 285 320 Z" fill="#4f46e5"/>
+  <rect x="184" y="176" width="32" height="42" rx="12" fill="#f5d0b5"/>
+  <circle cx="200" cy="132" r="46" fill="#f5d0b5"/>
+  <path d="M153 125 C153 82 182 72 206 74 C236 76 250 98 247 128 C238 106 220 98 198 98 C176 98 160 108 153 125 Z" fill="#1e293b"/>
+  <circle cx="183" cy="130" r="4" fill="#0f172a"/>
+  <circle cx="217" cy="130" r="4" fill="#0f172a"/>
+  <path d="M188 150 Q200 160 212 150" fill="none" stroke="#312e81" stroke-width="3.5" stroke-linecap="round"/>
+</svg>
+

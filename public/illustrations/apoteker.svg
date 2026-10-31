@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320" role="img" aria-label="Ilustrasi Profesi Apoteker">
+  <defs>
+    <linearGradient id="bgApoteker" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d1fae5"/>
+      <stop offset="100%" stop-color="#a7f3d0"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="320" rx="28" fill="url(#bgApoteker)"/>
+  <circle cx="330" cy="65" r="48" fill="#34d399" opacity="0.3"/>
+  <circle cx="65" cy="255" r="55" fill="#10b981" opacity="0.2"/>
+  <!-- Mortar & Pestle / Capsule Badge -->
+  <g transform="translate(42, 36)">
+    <rect width="54" height="54" rx="14" fill="#059669"/>
+    <path d="M15 26 h24 c0 9 -5 15 -12 15 s-12 -6 -12 -15 z" fill="#ffffff"/>
+    <path d="M31 14 l6 3 l-5 9 l-5 -2 z" fill="#a7f3d0"/>
+    <rect x="19" y="42" width="16" height="3.5" rx="1.5" fill="#ffffff"/>
+  </g>
+  <!-- Molecular / Formula Card -->
+  <g transform="translate(274, 125) rotate(5)">
+    <rect width="84" height="84" rx="14" fill="#ffffff" stroke="#34d399" stroke-width="3"/>
+    <polygon points="42,20 58,30 58,48 42,58 26,48 26,30" fill="none" stroke="#059669" stroke-width="3.5"/>
+    <circle cx="42" cy="20" r="4.5" fill="#10b981"/>
+    <circle cx="58" cy="30" r="4.5" fill="#059669"/>
+    <circle cx="26" cy="48" r="4.5" fill="#10b981"/>
+    <line x1="22" y1="70" x2="62" y2="70" stroke="#6ee7b7" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <!-- Character Body / Pharmacist Coat -->
+  <path d="M112 320 C112 235 148 210 200 210 C252 210 288 235 288 320 Z" fill="#ffffff"/>
+  <path d="M172 210 L200 320 L228 210 Z" fill="#059669"/>
+  <path d="M165 210 L194 275 L155 275 Z" fill="#e2e8f0"/>
+  <path d="M235 210 L206 275 L245 275 Z" fill="#e2e8f0"/>
+  <!-- Neck & Head -->
+  <rect x="184" y="176" width="32" height="42" rx="12" fill="#f5d0b5"/>
+  <circle cx="200" cy="132" r="47" fill="#f5d0b5"/>
+  <!-- Hair -->
+  <path d="M153 125 C153 82 182 72 206 74 C236 76 250 98 247 128 C238 106 220 98 198 98 C176 98 160 108 153 125 Z" fill="#0f172a"/>
+  <!-- Face -->
+  <circle cx="183" cy="130" r="4" fill="#0f172a"/>
+  <circle cx="217" cy="130" r="4" fill="#0f172a"/>
+  <path d="M188 150 Q200 160 212 150" fill="none" stroke="#065f46" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- Pocket & Capsule badge -->
+  <rect x="224" y="255" width="32" height="34" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2"/>
+  <rect x="234" y="244" width="12" height="22" rx="6" fill="#10b981"/>
+</svg>
+

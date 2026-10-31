@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320" role="img" aria-label="Ilustrasi Profesi Bidan">
+  <defs>
+    <linearGradient id="bgBidan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f3e8ff"/>
+      <stop offset="100%" stop-color="#e9d5ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="320" rx="28" fill="url(#bgBidan)"/>
+  <circle cx="330" cy="65" r="48" fill="#c084fc" opacity="0.3"/>
+  <circle cx="65" cy="255" r="55" fill="#9333ea" opacity="0.18"/>
+  <!-- Maternal & Child Care Badge -->
+  <g transform="translate(42, 36)">
+    <rect width="54" height="54" rx="14" fill="#7c3aed"/>
+    <circle cx="27" cy="21" r="6" fill="#ffffff"/>
+    <path d="M16 37 C16 29 38 29 38 37" stroke="#ffffff" stroke-width="4" stroke-linecap="round" fill="none"/>
+    <circle cx="27" cy="35" r="4" fill="#ddd6fe"/>
+  </g>
+  <!-- KIA Book (Buku Kesehatan Ibu dan Anak) icon -->
+  <g transform="translate(272, 128) rotate(-4)">
+    <rect width="78" height="96" rx="10" fill="#7c3aed"/>
+    <rect x="6" y="6" width="66" height="84" rx="6" fill="#ffffff"/>
+    <circle cx="39" cy="38" r="14" fill="#f3e8ff"/>
+    <path d="M39 45 C39 45 30 38 30 33 C30 30 33 28 35.5 28 C37.5 28 39 29.5 39 31 C39 29.5 40.5 28 42.5 28 C45 28 48 30 48 33 C48 38 39 45 39 45 Z" fill="#7c3aed"/>
+    <line x1="20" y1="64" x2="58" y2="64" stroke="#c084fc" stroke-width="4" stroke-linecap="round"/>
+    <line x1="26" y1="74" x2="52" y2="74" stroke="#e9d5ff" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <!-- Character Body / Midwife Uniform -->
+  <path d="M112 320 C112 235 148 210 200 210 C252 210 288 235 288 320 Z" fill="#7c3aed"/>
+  <path d="M158 212 L200 255 L242 212 Z" fill="#f3e8ff"/>
+  <!-- Hijab / Head -->
+  <path d="M145 138 C145 80 255 80 255 138 C255 186 240 218 200 226 C160 218 145 186 145 138 Z" fill="#5b21b6"/>
+  <circle cx="200" cy="138" r="42" fill="#f5d0b5"/>
+  <!-- Warm Expression -->
+  <circle cx="184" cy="134" r="4" fill="#0f172a"/>
+  <circle cx="216" cy="134" r="4" fill="#0f172a"/>
+  <path d="M187 152 Q200 162 213 152" fill="none" stroke="#5b21b6" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- Pin Bidan Delima / Badge -->
+  <circle cx="236" cy="262" r="11" fill="#f59e0b" stroke="#ffffff" stroke-width="2.5"/>
+  <circle cx="236" cy="262" r="4" fill="#ffffff"/>
+</svg>
+
