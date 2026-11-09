@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Profession, RIASEC_DEFINITIONS } from "@/types/career";
 import { getAccentTheme } from "@/lib/theme";
 import { useUserPrefs } from "@/components/UserPrefsProvider";
-import { Bookmark, Scale, ArrowRight, Sparkles } from "lucide-react";
+import { Bookmark, Scale, ArrowRight } from "lucide-react";
 
 export function ProfessionCard({ profession }: { profession: Profession }) {
   const theme = getAccentTheme(profession.accentColor);
@@ -24,47 +24,67 @@ export function ProfessionCard({ profession }: { profession: Profession }) {
       : profession.softSkills.slice(0, 3);
 
   return (
-    <article
-      className={`group relative flex flex-col rounded-3xl bg-white border-2 ${theme.borderSoft} hover:border-slate-300 shadow-sm hover:shadow-xl transition-all duration-200 overflow-hidden`}
-    >
-      {/* Top Trading Card Header Bar */}
+    <article className="card-trading group flex flex-col bg-white scroll-reveal">
+      {/* ── Card Header Bar — colored stripe ── */}
       <div
-        className={`px-5 py-3 flex items-center justify-between border-b ${theme.borderSoft} ${theme.bgSoft}`}
-      >
+        className="relative h-2 w-full shrink-0"
+        style={{ background: theme.hexPrimary }}
+        aria-hidden="true"
+      />
+
+      {/* ── Meta row ── */}
+      <div className="flex items-center justify-between px-4 pt-3 pb-2">
         <div className="flex items-center gap-2">
+          {/* Rumpun badge */}
           <span
-            className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${theme.badgeBg} ${theme.badgeText}`}
+            className="px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider"
+            style={{
+              background: `${theme.hexPrimary}18`,
+              color: theme.hexPrimary,
+            }}
           >
             {profession.rumpunName}
           </span>
         </div>
+
+        {/* Card number + actions */}
         <div className="flex items-center gap-1.5">
           {profession.cardNumber && (
-            <span className="px-2.5 py-0.5 rounded-lg bg-slate-900 text-white font-mono text-xs font-bold tracking-wider">
+            <span
+              className="font-mono text-[10px] font-bold tracking-widest px-2 py-0.5 rounded"
+              style={{
+                background: "var(--color-ink)",
+                color: "#fff",
+              }}
+            >
               #{profession.cardNumber}
             </span>
           )}
+
+          {/* Favorite button */}
           <button
             type="button"
             onClick={() => toggleFavorite(profession.slug)}
             aria-pressed={favored}
             aria-label={
               favored
-                ? `Hapus ${profession.name} dari profesi favorit`
-                : `Simpan ${profession.name} ke profesi favorit`
+                ? `Hapus ${profession.name} dari favorit`
+                : `Simpan ${profession.name} ke favorit`
             }
-            className={`p-1.5 rounded-lg border transition-colors ${
+            className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
               favored
-                ? "bg-rose-50 border-rose-200 text-rose-600"
-                : "bg-white border-slate-200 text-slate-400 hover:text-rose-600"
+                ? "bg-rose-50 text-rose-600"
+                : "text-[var(--color-ink-soft)] hover:text-rose-600 hover:bg-rose-50"
             }`}
           >
             <Bookmark
-              className="w-4 h-4"
+              className="w-3.5 h-3.5"
               fill={favored ? "currentColor" : "none"}
               aria-hidden="true"
             />
           </button>
+
+          {/* Compare button */}
           <button
             type="button"
             onClick={() => toggleCompare(profession.slug)}
@@ -72,94 +92,102 @@ export function ProfessionCard({ profession }: { profession: Profession }) {
             aria-label={
               compared
                 ? `Hapus ${profession.name} dari perbandingan`
-                : `Tambahkan ${profession.name} untuk dibandingkan`
+                : `Tambah ${profession.name} untuk dibandingkan`
             }
-            className={`p-1.5 rounded-lg border transition-colors ${
+            className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
               compared
-                ? "bg-indigo-50 border-indigo-200 text-indigo-600"
-                : "bg-white border-slate-200 text-slate-400 hover:text-indigo-600"
+                ? "bg-indigo-50 text-indigo-600"
+                : "text-[var(--color-ink-soft)] hover:text-indigo-600 hover:bg-indigo-50"
             }`}
           >
-            <Scale className="w-4 h-4" aria-hidden="true" />
+            <Scale className="w-3.5 h-3.5" aria-hidden="true" />
           </button>
         </div>
       </div>
 
-      {/* Illustration Frame */}
-      <div className="relative px-5 pt-4">
-        <div className="relative w-full aspect-[5/4] rounded-2xl overflow-hidden bg-slate-100 border border-slate-200/60">
-          <img
-            src={profession.illustrationUrl}
-            alt={`Ilustrasi profesi ${profession.name}`}
-            className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-300"
-            loading="lazy"
-          />
-          {/* Floating RIASEC Badges */}
-          <div className="absolute bottom-2.5 right-2.5 flex items-center gap-1.5 bg-white/95 backdrop-blur-sm px-2.5 py-1.5 rounded-xl shadow-sm border border-slate-200">
-            <span className="text-[11px] font-semibold text-slate-500 mr-0.5">
-              RIASEC:
-            </span>
-            {profession.riasecCodes.map((code) => {
-              const info = RIASEC_DEFINITIONS[code];
-              return (
-                <span
-                  key={code}
-                  className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-xs font-extrabold ${info.badgeSolid}`}
-                >
-                  <span>{code}</span>
-                  <span className="hidden sm:inline font-medium text-[10px] opacity-90">
-                    {info.nameEn}
-                  </span>
+      {/* ── Illustration Frame ── */}
+      <div className="relative mx-4 rounded-xl overflow-hidden aspect-[4/3] bg-[var(--color-cream)]">
+        <img
+          src={profession.illustrationUrl}
+          alt={`Ilustrasi profesi ${profession.name}`}
+          className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-500"
+          loading="lazy"
+        />
+
+        {/* RIASEC overlay badges */}
+        <div className="absolute bottom-2.5 left-2.5 flex items-center gap-1.5">
+          {profession.riasecCodes.map((code) => {
+            const info = RIASEC_DEFINITIONS[code];
+            return (
+              <span
+                key={code}
+                className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[11px] font-extrabold backdrop-blur-sm ${info.badgeSolid}`}
+                title={`RIASEC: ${code} — ${info.nameEn}`}
+              >
+                <span>{code}</span>
+                <span className="hidden sm:inline font-medium text-[9px] opacity-90">
+                  {info.nameEn}
                 </span>
-              );
-            })}
-          </div>
+              </span>
+            );
+          })}
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
-        <div className="space-y-2">
-          <h3 className="text-xl font-extrabold text-slate-900 group-hover:text-blue-700 transition-colors">
-            <Link href={`/profesi/${profession.slug}`} className="focus:outline-none">
+      {/* ── Content Body ── */}
+      <div className="p-4 flex-1 flex flex-col gap-3">
+        {/* Name */}
+        <div>
+          <h3
+            className="font-serif text-lg font-semibold leading-snug group-hover:text-[var(--color-accent)] transition-colors"
+            style={{ color: "var(--color-ink)" }}
+          >
+            <Link
+              href={`/profesi/${profession.slug}`}
+              className="focus:outline-none after:absolute after:inset-0"
+            >
               {profession.name}
             </Link>
           </h3>
-          <p className="text-sm text-slate-600 line-clamp-3 leading-relaxed">
+          <p
+            className="text-xs mt-1 leading-relaxed line-clamp-2"
+            style={{ color: "var(--color-ink-soft)" }}
+          >
             {profession.summary}
           </p>
         </div>
 
-        {/* 3 Primary Soft Skills on Card */}
-        <div className="space-y-2 pt-2 border-t border-slate-100">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider">
-            <Sparkles className="w-3.5 h-3.5 text-amber-500" aria-hidden="true" />
-            <span>3 Soft Skill Utama Kartu</span>
-          </div>
+        {/* 3 Soft Skills */}
+        {displaySkills.length > 0 && (
           <div className="flex flex-wrap gap-1.5">
             {displaySkills.map((sk) => (
               <span
                 key={sk.name}
-                className="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-semibold"
+                className="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-[var(--color-cream)] text-[var(--color-ink-soft)]"
               >
                 {sk.name}
               </span>
             ))}
           </div>
-        </div>
+        )}
 
-        {/* Action Button */}
-        <div className="pt-2">
-          <Link
-            href={`/profesi/${profession.slug}`}
-            className={`w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold text-sm text-white ${theme.buttonBg} ${theme.buttonHover} shadow-sm transition-all`}
-          >
-            <span>Lihat Profil {profession.name}</span>
-            <ArrowRight className="w-4 h-4" aria-hidden="true" />
-          </Link>
-        </div>
+        {/* Spacer */}
+        <div className="flex-1" />
+
+        {/* CTA */}
+        <Link
+          href={`/profesi/${profession.slug}`}
+          className="mt-auto w-full inline-flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-all"
+          style={{
+            background: theme.hexPrimary,
+          }}
+          tabIndex={-1}
+          aria-hidden="true"
+        >
+          <span>Lihat Profil Lengkap</span>
+          <ArrowRight className="w-4 h-4" aria-hidden="true" />
+        </Link>
       </div>
     </article>
   );
 }
-

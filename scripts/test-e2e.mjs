@@ -18,6 +18,7 @@ async function runVerification() {
     { path: "/profesi/apoteker", expectedStatus: 200, mustContain: "03/04" },
     { path: "/profesi/bidan", expectedStatus: 200, mustContain: "04/04" },
     { path: "/bandingkan", expectedStatus: 200, mustContain: "Bandingkan Profesi Pilihanmu" },
+    { path: "/kuis-minat", expectedStatus: 200, mustContain: "Temukan Gaya Aktivitas Kerja Paling Cocok Untukmu" },
     { path: "/tentang", expectedStatus: 200, mustContain: "Mengenal Teori Minat Karier Holland (RIASEC)" },
     { path: "/profesi/profesi-tidak-ada-404", expectedStatus: 404, mustContain: "404" },
   ];

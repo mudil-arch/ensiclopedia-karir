@@ -2,41 +2,310 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================
+   KARTU KARIER — Design System
+   Philosophy: Warm, editorial, crafted — not generic SaaS
+   ============================================================ */
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Lora:ital,wght@0,400;0,600;1,400;1,600&display=swap');
+
 @layer base {
   :root {
-    --font-sans: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont,
-      "Segoe UI", Roboto, sans-serif;
+    /* Brand palette — warm earthy + vibrant accent */
+    --color-ink:        #1a1612;        /* Near-black warm */
+    --color-ink-soft:   #3d3530;        /* Medium warm brown */
+    --color-parchment:  #faf7f2;        /* Warm off-white */
+    --color-cream:      #f4ede2;        /* Warmer section bg */
+    --color-accent:     #c8460a;        /* Burnt orange – main CTA */
+    --color-accent-lt:  #f97316;        /* Bright orange hover */
+    --color-gold:       #d4a017;        /* Gold accent */
+    --color-teal-brand: #0e7f73;        /* Teal secondary */
+
+    /* Typography scale */
+    --font-serif: 'Lora', Georgia, 'Times New Roman', serif;
+    --font-sans:  'Plus Jakarta Sans', system-ui, sans-serif;
+
+    /* Spacing tokens */
+    --section-gap: clamp(3rem, 8vw, 6rem);
+
+    /* Card aesthetic */
+    --card-radius: 1.25rem;
+    --card-shadow: 0 4px 24px -4px rgba(26,22,18,0.10), 0 1px 4px -1px rgba(26,22,18,0.06);
+    --card-shadow-hover: 0 16px 48px -8px rgba(26,22,18,0.18), 0 4px 12px -4px rgba(26,22,18,0.10);
+
+    /* Hero overlay */
+    --hero-gradient: linear-gradient(135deg, #1a0e08 0%, #2d1a0e 40%, #0e3d35 100%);
   }
 
   html {
     scroll-behavior: smooth;
     font-family: var(--font-sans);
-    color: #0f172a;
-    background-color: #f8fafc;
+    color: var(--color-ink);
+    background-color: var(--color-parchment);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 
   /* Modern Web Guidance: improve-text-layout-and-legibility */
-  h1,
-  h2,
-  h3,
-  h4 {
+  h1, h2, h3, h4 {
     text-wrap: balance;
   }
 
-  p,
-  li,
-  blockquote {
+  p, li, blockquote {
     text-wrap: pretty;
   }
 
-  /* Modern Web Guidance: accessibility - high contrast focus indicators */
+  /* High contrast accessible focus indicator */
   :where(a:any-link, button, input, select, textarea, summary):focus-visible {
-    outline: 3px solid #2563eb;
+    outline: 3px solid var(--color-accent);
     outline-offset: 3px;
+    border-radius: 4px;
   }
 }
 
-/* Visually hidden utility from modern-web-guidance accessibility guide */
+/* ============================================================
+   TYPOGRAPHY HELPERS
+   ============================================================ */
+.font-serif { font-family: var(--font-serif); }
+.font-sans  { font-family: var(--font-sans); }
+
+.text-ink      { color: var(--color-ink); }
+.text-ink-soft { color: var(--color-ink-soft); }
+.bg-parchment  { background-color: var(--color-parchment); }
+.bg-cream      { background-color: var(--color-cream); }
+
+/* ============================================================
+   SECTION DECORATIVE DIVIDER
+   ============================================================ */
+.section-divider {
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--color-gold), transparent);
+  opacity: 0.4;
+  margin-block: 0.5rem;
+}
+
+/* ============================================================
+   TRADING CARD AESTHETIC
+   ============================================================ */
+.card-trading {
+  background: #fff;
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-trading::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--card-radius);
+  border: 1.5px solid rgba(255,255,255,0.8);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.card-trading:hover {
+  box-shadow: var(--card-shadow-hover);
+  transform: translateY(-3px);
+}
+
+/* Card "foil" shimmer on hover — decorative only */
+.card-trading::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0) 60%);
+  background-size: 200% 200%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  border-radius: var(--card-radius);
+}
+
+.card-trading:hover::after {
+  opacity: 1;
+}
+
+/* ============================================================
+   SCROLL ENTRY ANIMATION (Modern Web Guidance: scroll-entry-exit-effects)
+   Progressive enhancement — no fallback needed (decorative only)
+   ============================================================ */
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    @keyframes fade-up-in {
+      from {
+        opacity: 0;
+        translate: 0 24px;
+      }
+    }
+
+    .scroll-reveal {
+      animation: fade-up-in 0.6s ease backwards;
+      animation-timeline: view();
+      animation-range: entry 0% entry 30%;
+    }
+  }
+}
+
+/* ============================================================
+   HERO TEXTURE OVERLAY
+   ============================================================ */
+.hero-bg {
+  background: var(--hero-gradient);
+  position: relative;
+}
+
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Crect width='60' height='60' fill='none'/%3E%3Ccircle cx='30' cy='30' r='1' fill='%23ffffff' opacity='0.04'/%3E%3Cline x1='0' y1='30' x2='60' y2='30' stroke='%23ffffff' stroke-width='0.3' opacity='0.04'/%3E%3Cline x1='30' y1='0' x2='30' y2='60' stroke='%23ffffff' stroke-width='0.3' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+/* ============================================================
+   RIASEC BADGE RING ANIMATION
+   ============================================================ */
+@keyframes ring-pulse {
+  0%, 100% { box-shadow: 0 0 0 0px currentColor; }
+  50%       { box-shadow: 0 0 0 4px currentColor; }
+}
+
+.riasec-badge-active {
+  animation: ring-pulse 1.8s ease infinite;
+}
+
+/* ============================================================
+   QUIZ PROGRESS BAR
+   ============================================================ */
+.quiz-progress-bar {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--color-cream);
+  overflow: hidden;
+}
+
+.quiz-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--color-teal-brand), var(--color-accent));
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================================
+   SECTION LABEL CHIP
+   ============================================================ */
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: 0.5rem;
+}
+
+.section-label::before {
+  content: '';
+  display: block;
+  width: 1.5rem;
+  height: 2px;
+  background: var(--color-accent);
+  border-radius: 999px;
+}
+
+/* ============================================================
+   NUMBER STAT DISPLAY
+   ============================================================ */
+.stat-number {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 600;
+  color: var(--color-ink);
+  line-height: 1;
+}
+
+/* ============================================================
+   RUMPUN GRID CARD HOVER BORDER
+   ============================================================ */
+.rumpun-card {
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.rumpun-card::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.rumpun-card:hover::before {
+  transform: scaleX(1);
+}
+
+/* ============================================================
+   PROFESSION DETAIL PAGE — EDITORIAL STYLES
+   ============================================================ */
+.prose-career h3 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--color-ink);
+  margin-bottom: 0.75rem;
+}
+
+.prose-career ul {
+  list-style: none;
+  padding: 0;
+}
+
+.prose-career ul li {
+  padding-left: 1.25rem;
+  position: relative;
+  margin-bottom: 0.5rem;
+}
+
+.prose-career ul li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+/* ============================================================
+   PRINT STYLES
+   ============================================================ */
+@media print {
+  header, footer, .no-print {
+    display: none !important;
+  }
+  body, main {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .print-break-inside-avoid {
+    break-inside: avoid;
+  }
+}
+
+/* ============================================================
+   ACCESSIBILITY — VISUALLY HIDDEN
+   ============================================================ */
 .visually-hidden:where(:not(:focus-within, :active)) {
   position: absolute !important;
   clip-path: inset(50%) !important;
@@ -49,20 +318,67 @@
   white-space: nowrap !important;
 }
 
-/* Print optimization for Career Profile Page */
-@media print {
-  header,
-  footer,
-  .no-print {
-    display: none !important;
-  }
-  body,
-  main {
-    background: #ffffff !important;
-    color: #000000 !important;
-  }
-  .print-break-inside-avoid {
-    break-inside: avoid;
-  }
+/* ============================================================
+   SMOOTH FADE TRANSITIONS
+   ============================================================ */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
+.animate-fade-in {
+  animation: fade-in 0.4s ease both;
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ============================================================
+   CTA BUTTON STYLES
+   ============================================================ */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.75rem;
+  background: var(--color-accent);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  border-radius: 0.75rem;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 4px 16px -4px rgba(200,70,10,0.4);
+  letter-spacing: 0.01em;
+}
+
+.btn-primary:hover {
+  background: var(--color-accent-lt);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px -4px rgba(200,70,10,0.5);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.75rem;
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  border-radius: 0.75rem;
+  border: 1.5px solid rgba(255,255,255,0.18);
+  transition: background 0.2s, transform 0.15s;
+  backdrop-filter: blur(4px);
+}
+
+.btn-ghost:hover {
+  background: rgba(255,255,255,0.14);
+  transform: translateY(-1px);
+}

@@ -16,15 +16,15 @@ import { RumpunIcon } from "@/components/RumpunIcon";
 import { useUserPrefs } from "@/components/UserPrefsProvider";
 import {
   Search,
-  Sparkles,
   ArrowRight,
   QrCode,
   Scale,
   Compass,
   Clock,
   Bookmark,
-  CheckCircle2,
   SlidersHorizontal,
+  ChevronDown,
+  Sparkles,
 } from "lucide-react";
 
 interface HomeExplorerClientProps {
@@ -40,10 +40,10 @@ export function HomeExplorerClient({
   const [selectedRumpun, setSelectedRumpun] = useState("all");
   const [selectedSkill, setSelectedSkill] = useState("all");
   const [selectedRiasec, setSelectedRiasec] = useState<RiasecCode | "all">("all");
+  const [filterOpen, setFilterOpen] = useState(false);
 
   const { recentlyViewed, favorites } = useUserPrefs();
 
-  // Filter professions responsively
   const filteredProfessions = useMemo(() => {
     return professions.filter((prof) => {
       const q = searchQuery.trim().toLowerCase();
@@ -72,13 +72,7 @@ export function HomeExplorerClient({
 
       return matchesQuery && matchesRumpun && matchesSkill && matchesRiasec;
     });
-  }, [
-    professions,
-    searchQuery,
-    selectedRumpun,
-    selectedSkill,
-    selectedRiasec,
-  ]);
+  }, [professions, searchQuery, selectedRumpun, selectedSkill, selectedRiasec]);
 
   const recentProfessions = useMemo(() => {
     return recentlyViewed
@@ -94,385 +88,561 @@ export function HomeExplorerClient({
     return map;
   }, [professions]);
 
+  const hasActiveFilter =
+    searchQuery || selectedRumpun !== "all" || selectedSkill !== "all" || selectedRiasec !== "all";
+
+  const resetFilters = () => {
+    setSearchQuery("");
+    setSelectedRumpun("all");
+    setSelectedSkill("all");
+    setSelectedRiasec("all");
+  };
+
   return (
-    <div className="space-y-16 sm:space-y-24 pb-12">
-      {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950 text-white pt-10 pb-16 sm:py-20">
-        {/* Decorative Subtle Pattern */}
+    <div className="bg-[var(--color-parchment)]">
+
+      {/* ═══════════════════════════════════════════════════════
+          1.  HERO — editorial dark with warm gradient
+          ═══════════════════════════════════════════════════════ */}
+      <section
+        className="hero-bg relative overflow-hidden"
+        aria-labelledby="main-content"
+      >
+        {/* Noise texture overlay */}
         <div
-          className="absolute inset-0 opacity-15 pointer-events-none"
+          className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-screen"
           style={{
             backgroundImage:
-              "radial-gradient(#60a5fa 1.25px, transparent 1.25px)",
-            backgroundSize: "28px 28px",
+              "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E\")",
           }}
           aria-hidden="true"
         />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-            {/* Left Copy */}
-            <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs sm:text-sm font-semibold">
-                <QrCode className="w-4 h-4 text-blue-300" aria-hidden="true" />
-                <span>Pendamping Career Profile Trading Card SMA/SMK</span>
+        {/* Decorative circles */}
+        <div
+          className="absolute -top-32 -right-32 w-96 h-96 rounded-full opacity-10 pointer-events-none"
+          style={{
+            background: "radial-gradient(circle, var(--color-gold) 0%, transparent 70%)",
+          }}
+          aria-hidden="true"
+        />
+        <div
+          className="absolute -bottom-24 -left-24 w-80 h-80 rounded-full opacity-8 pointer-events-none"
+          style={{
+            background: "radial-gradient(circle, var(--color-teal-brand) 0%, transparent 70%)",
+          }}
+          aria-hidden="true"
+        />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-28 sm:pt-20 sm:pb-36">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+
+            {/* ── Left Copy ── */}
+            <div className="lg:col-span-6 xl:col-span-7 space-y-7">
+
+              {/* Eyebrow */}
+              <div className="flex items-center gap-3">
+                <span
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase"
+                  style={{
+                    background: "rgba(255,255,255,0.08)",
+                    color: "rgba(255,255,255,0.75)",
+                    border: "1px solid rgba(255,255,255,0.12)",
+                  }}
+                >
+                  <QrCode className="w-3.5 h-3.5" aria-hidden="true" />
+                  Kartu Profesi Fisik + Digital
+                </span>
               </div>
 
-              <h1
-                id="main-content"
-                tabIndex={-1}
-                className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.12] text-white"
-              >
-                {siteConfig.heroTitle}
-              </h1>
-
-              <p className="text-base sm:text-lg text-slate-200 max-w-2xl leading-relaxed">
-                {siteConfig.heroDescription}
-              </p>
+              {/* Headline */}
+              <div className="space-y-3">
+                <h1
+                  id="main-content"
+                  tabIndex={-1}
+                  className="font-serif text-4xl sm:text-5xl xl:text-6xl font-semibold text-white leading-[1.1]"
+                  style={{ letterSpacing: "-0.02em" }}
+                >
+                  {siteConfig.heroTitle}
+                </h1>
+                <p
+                  className="text-base sm:text-lg leading-relaxed max-w-lg"
+                  style={{ color: "rgba(255,255,255,0.65)" }}
+                >
+                  {siteConfig.heroDescription}
+                </p>
+              </div>
 
               {/* CTA Buttons */}
-              <div className="flex flex-wrap items-center gap-3.5 pt-2">
-                <a
-                  href="#pencarian-profesi"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm sm:text-base shadow-lg shadow-blue-600/30 transition-all"
-                >
-                  <span>Jelajahi Profesi</span>
+              <div className="flex flex-wrap items-center gap-3 pt-1">
+                <a href="#pencarian-profesi" className="btn-primary">
+                  Jelajahi Profesi
                   <ArrowRight className="w-4 h-4" aria-hidden="true" />
                 </a>
-                <a
-                  href="#eksplorasi-minat-riasec"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-sm sm:text-base backdrop-blur-sm transition-all"
-                >
-                  <Compass className="w-4 h-4 text-amber-300" aria-hidden="true" />
-                  <span>Temukan Minat Karier</span>
+                <a href="#eksplorasi-riasec" className="btn-ghost">
+                  <Compass className="w-4 h-4" style={{ color: "var(--color-gold)" }} aria-hidden="true" />
+                  Minat Karier (RIASEC)
                 </a>
               </div>
 
-              {/* Quick Trust Pills */}
-              <div className="pt-4 grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs sm:text-sm text-slate-300">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2
-                    className="w-4 h-4 text-emerald-400 shrink-0"
-                    aria-hidden="true"
-                  />
-                  <span>Terhubung QR Kartu Fisik</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2
-                    className="w-4 h-4 text-emerald-400 shrink-0"
-                    aria-hidden="true"
-                  />
-                  <span>Referensi Resmi Indonesia</span>
-                </div>
-                <div className="flex items-center gap-2 col-span-2 sm:col-span-1">
-                  <CheckCircle2
-                    className="w-4 h-4 text-emerald-400 shrink-0"
-                    aria-hidden="true"
-                  />
-                  <span>Panduan Minat RIASEC</span>
-                </div>
+              {/* Trust row */}
+              <div
+                className="flex flex-wrap gap-x-6 gap-y-2 pt-2 text-xs font-medium"
+                style={{ color: "rgba(255,255,255,0.45)" }}
+              >
+                <span className="flex items-center gap-1.5">
+                  <span className="w-1 h-1 rounded-full bg-emerald-400 inline-block" />
+                  QR Code Terintegrasi
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="w-1 h-1 rounded-full bg-emerald-400 inline-block" />
+                  Referensi Resmi Indonesia
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="w-1 h-1 rounded-full bg-emerald-400 inline-block" />
+                  Panduan Holland RIASEC
+                </span>
               </div>
             </div>
 
-            {/* Right Visual Illustration: Interactive Trading Card Stack */}
-            <div className="lg:col-span-5">
-              <div className="relative mx-auto max-w-md bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-5 sm:p-6 shadow-2xl">
-                <div className="flex items-center justify-between pb-4 mb-4 border-b border-white/15">
-                  <div className="flex items-center gap-2.5">
-                    <span className="px-2.5 py-1 rounded-lg bg-blue-500 text-white text-xs font-extrabold tracking-wider">
-                      SERI 01–04
-                    </span>
-                    <span className="text-sm font-bold text-white">
-                      Kartu Karier Kesehatan
-                    </span>
-                  </div>
-                  <span className="text-xs text-blue-200 font-mono">
-                    QR Ready
-                  </span>
-                </div>
-
-                {/* Mini Interactive Grid of the 4 Cards */}
-                <div className="grid grid-cols-2 gap-3">
-                  {professions.slice(0, 4).map((prof) => (
-                    <Link
-                      key={prof.slug}
-                      href={`/profesi/${prof.slug}`}
-                      className="group bg-white rounded-2xl p-3 text-slate-900 hover:scale-[1.02] transition-all shadow-md"
-                    >
-                      <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 mb-1.5">
-                        <span>{prof.rumpunName}</span>
-                        <span className="font-mono text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded">
-                          {prof.cardNumber}
-                        </span>
-                      </div>
-                      <div className="aspect-[5/4] rounded-xl overflow-hidden bg-slate-100 mb-2">
-                        <img
-                          src={prof.illustrationUrl}
-                          alt={`Kartu profesi ${prof.name}`}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <p className="font-extrabold text-sm text-slate-900 group-hover:text-blue-600">
-                          {prof.name}
-                        </p>
-                        <div className="flex gap-1">
-                          {prof.riasecCodes.map((c) => (
-                            <span
-                              key={c}
-                              className="w-5 h-5 rounded-full bg-slate-900 text-white text-[10px] font-bold flex items-center justify-center"
-                            >
-                              {c}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-
-                <div className="mt-4 pt-3 border-t border-white/15 flex items-center justify-between text-xs text-blue-100">
-                  <span>Pindai QR pada kartu fisik atau klik kartu di atas</span>
-                  <Link
-                    href="/profesi"
-                    className="font-bold text-white underline hover:text-blue-200"
-                  >
-                    Semua Kartu →
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 2. PENCARIAN PROFESI RESPONSIF */}
-      <section
-        id="pencarian-profesi"
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 sm:-mt-28 relative z-20"
-      >
-        <div className="bg-white rounded-3xl shadow-xl border border-slate-200/90 p-6 sm:p-8">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-100">
-            <div>
-              <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 flex items-center gap-2">
-                <Search className="w-6 h-6 text-blue-600" aria-hidden="true" />
-                <span>Cari dan Temukan Profesi</span>
-              </h2>
-              <p className="text-sm text-slate-600 mt-1">
-                Filter langsung berdasarkan nama profesi, rumpun pekerjaan, kata
-                kunci keterampilan, atau minat kerja RIASEC.
-              </p>
-            </div>
-            {(searchQuery ||
-              selectedRumpun !== "all" ||
-              selectedSkill !== "all" ||
-              selectedRiasec !== "all") && (
-              <button
-                type="button"
-                onClick={() => {
-                  setSearchQuery("");
-                  setSelectedRumpun("all");
-                  setSelectedSkill("all");
-                  setSelectedRiasec("all");
-                }}
-                className="self-start md:self-auto px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700 transition-colors"
+            {/* ── Right — Trading Card Preview ── */}
+            <div className="lg:col-span-6 xl:col-span-5">
+              <div
+                className="relative mx-auto max-w-sm"
+                style={{ perspective: "1000px" }}
               >
-                Reset Filter Pencarian
-              </button>
-            )}
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 pt-6">
-            {/* Input Nama / Kata Kunci */}
-            <div className="md:col-span-5">
-              <label
-                htmlFor="home-search-input"
-                className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5"
-              >
-                Nama Profesi / Kata Kunci
-              </label>
-              <div className="relative">
-                <Search
-                  className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"
+                {/* Stacked card shadow effect */}
+                <div
+                  className="absolute inset-x-4 top-3 h-full rounded-2xl"
+                  style={{
+                    background: "rgba(255,255,255,0.06)",
+                    transform: "rotate(2deg)",
+                  }}
                   aria-hidden="true"
                 />
-                <input
-                  id="home-search-input"
-                  type="search"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Cth: Dokter, Perawat, obat, ibu hamil..."
-                  className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 text-sm text-slate-900 focus:border-blue-600"
+                <div
+                  className="absolute inset-x-2 top-1.5 h-full rounded-2xl"
+                  style={{
+                    background: "rgba(255,255,255,0.04)",
+                    transform: "rotate(1deg)",
+                  }}
+                  aria-hidden="true"
                 />
+
+                {/* Main card container */}
+                <div
+                  className="relative rounded-2xl overflow-hidden"
+                  style={{
+                    background: "rgba(255,255,255,0.07)",
+                    border: "1px solid rgba(255,255,255,0.12)",
+                    backdropFilter: "blur(16px)",
+                  }}
+                >
+                  {/* Card header */}
+                  <div
+                    className="flex items-center justify-between px-5 py-4"
+                    style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <span
+                        className="px-2.5 py-1 rounded-lg text-[11px] font-extrabold tracking-wider"
+                        style={{
+                          background: "var(--color-accent)",
+                          color: "#fff",
+                        }}
+                      >
+                        SERI 01–04
+                      </span>
+                      <span className="text-sm font-semibold text-white/80">
+                        Kartu Karier Kesehatan
+                      </span>
+                    </div>
+                    <span
+                      className="text-[10px] font-mono font-bold tracking-widest"
+                      style={{ color: "var(--color-gold)" }}
+                    >
+                      QR READY
+                    </span>
+                  </div>
+
+                  {/* Mini card grid */}
+                  <div className="p-4 grid grid-cols-2 gap-3">
+                    {professions.slice(0, 4).map((prof, i) => (
+                      <Link
+                        key={prof.slug}
+                        href={`/profesi/${prof.slug}`}
+                        className="group bg-white rounded-xl overflow-hidden hover:scale-[1.03] transition-all duration-200 shadow-md"
+                        style={{ animationDelay: `${i * 80}ms` }}
+                      >
+                        {/* Top bar */}
+                        <div
+                          className="h-1.5"
+                          style={{
+                            background: getAccentTheme(prof.accentColor).hexPrimary,
+                          }}
+                        />
+                        <div className="p-3">
+                          <div className="flex items-center justify-between mb-2">
+                            <span
+                              className="text-[9px] font-bold uppercase tracking-widest"
+                              style={{ color: "var(--color-ink-soft)" }}
+                            >
+                              {prof.rumpunName}
+                            </span>
+                            <span
+                              className="font-mono text-[9px] font-bold px-1.5 py-0.5 rounded"
+                              style={{
+                                background: "var(--color-ink)",
+                                color: "#fff",
+                              }}
+                            >
+                              #{prof.cardNumber}
+                            </span>
+                          </div>
+                          <div className="aspect-[4/3] rounded-lg overflow-hidden bg-[var(--color-cream)] mb-2">
+                            <img
+                              src={prof.illustrationUrl}
+                              alt={`Kartu profesi ${prof.name}`}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <p className="font-semibold text-xs text-[var(--color-ink)] group-hover:text-[var(--color-accent)] transition-colors">
+                              {prof.name}
+                            </p>
+                            <div className="flex gap-0.5">
+                              {prof.riasecCodes.map((c) => (
+                                <span
+                                  key={c}
+                                  className="w-4 h-4 rounded-full text-white text-[8px] font-bold flex items-center justify-center"
+                                  style={{
+                                    background: getAccentTheme(prof.accentColor).hexPrimary,
+                                  }}
+                                >
+                                  {c}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+
+                  {/* Card footer */}
+                  <div
+                    className="flex items-center justify-between px-5 py-3 text-xs"
+                    style={{
+                      borderTop: "1px solid rgba(255,255,255,0.08)",
+                      color: "rgba(255,255,255,0.45)",
+                    }}
+                  >
+                    <span>Pindai QR atau ketuk kartu di atas</span>
+                    <Link
+                      href="/profesi"
+                      className="font-semibold text-white/70 hover:text-white transition-colors"
+                    >
+                      Semua →
+                    </Link>
+                  </div>
+                </div>
               </div>
             </div>
-
-            {/* Select Rumpun Pekerjaan */}
-            <div className="md:col-span-4">
-              <label
-                htmlFor="home-rumpun-select"
-                className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5"
-              >
-                Rumpun Pekerjaan
-              </label>
-              <select
-                id="home-rumpun-select"
-                value={selectedRumpun}
-                onChange={(e) => setSelectedRumpun(e.target.value)}
-                className="w-full px-3.5 py-3 rounded-xl border border-slate-300 text-sm text-slate-900 bg-white focus:border-blue-600"
-              >
-                <option value="all">Semua Rumpun Pekerjaan</option>
-                {rumpunList.map((r) => (
-                  <option key={r.slug} value={r.slug}>
-                    {r.name}{" "}
-                    {countByRumpun[r.slug]
-                      ? `(${countByRumpun[r.slug]} profesi)`
-                      : ""}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Select Keterampilan */}
-            <div className="md:col-span-3">
-              <label
-                htmlFor="home-skill-select"
-                className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5"
-              >
-                Kata Kunci Keterampilan
-              </label>
-              <select
-                id="home-skill-select"
-                value={selectedSkill}
-                onChange={(e) => setSelectedSkill(e.target.value)}
-                className="w-full px-3.5 py-3 rounded-xl border border-slate-300 text-sm text-slate-900 bg-white focus:border-blue-600"
-              >
-                <option value="all">Semua Keterampilan</option>
-                {STANDARD_SOFT_SKILLS.map((sk) => (
-                  <option key={sk} value={sk}>
-                    Soft Skill: {sk}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* Filter Cepat RIASEC */}
-          <div
-            id="eksplorasi-minat-riasec"
-            className="mt-5 pt-5 border-t border-slate-100"
-          >
-            <div className="flex items-center gap-2 mb-2.5">
-              <SlidersHorizontal
-                className="w-4 h-4 text-blue-600"
-                aria-hidden="true"
-              />
-              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                Filter Cepat Minat Aktivitas Kerja (Holland RIASEC):
-              </span>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={() => setSelectedRiasec("all")}
-                className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
-                  selectedRiasec === "all"
-                    ? "bg-slate-900 text-white shadow-sm"
-                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                }`}
-              >
-                Semua Tipe
-              </button>
-              {(Object.keys(RIASEC_DEFINITIONS) as RiasecCode[]).map((code) => {
-                const info = RIASEC_DEFINITIONS[code];
-                const active = selectedRiasec === code;
-                return (
-                  <button
-                    key={code}
-                    type="button"
-                    onClick={() =>
-                      setSelectedRiasec(active ? "all" : code)
-                    }
-                    aria-pressed={active}
-                    className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold border transition-all ${
-                      active
-                        ? `${info.badgeSolid} border-transparent shadow-sm`
-                        : `${info.colorBg} ${info.colorText} ${info.colorBorder} hover:opacity-90`
-                    }`}
-                  >
-                    <span className="font-extrabold">{code}</span>
-                    <span>— {info.nameEn}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Live Status Count */}
-          <div
-            aria-live="polite"
-            className="mt-5 flex items-center justify-between text-xs sm:text-sm font-medium text-slate-600"
-          >
-            <span>
-              Menampilkan{" "}
-              <strong className="text-slate-900">
-                {filteredProfessions.length}
-              </strong>{" "}
-              dari {professions.length} profesi yang dipublikasikan.
-            </span>
           </div>
         </div>
       </section>
 
-      {/* 3. PROFESI PILIHAN / HASIL PENCARIAN */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      {/* ═══════════════════════════════════════════════════════
+          2.  SEARCH & FILTER — elevated card over hero
+          ═══════════════════════════════════════════════════════ */}
+      <section
+        id="pencarian-profesi"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-14 sm:-mt-16 relative z-20"
+      >
+        <div
+          className="bg-white rounded-2xl shadow-xl overflow-hidden"
+          style={{ border: "1px solid rgba(26,22,18,0.08)" }}
+        >
+          {/* Top row */}
+          <div
+            className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-5 sm:px-7 py-5"
+            style={{ borderBottom: "1px solid rgba(26,22,18,0.06)" }}
+          >
+            <div className="flex items-center gap-3">
+              <div
+                className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+                style={{ background: "var(--color-cream)" }}
+              >
+                <Search className="w-4 h-4" style={{ color: "var(--color-ink-soft)" }} aria-hidden="true" />
+              </div>
+              <div>
+                <h2 className="text-base font-bold text-[var(--color-ink)]">
+                  Cari dan Temukan Profesi
+                </h2>
+                <p className="text-xs text-[var(--color-ink-soft)]">
+                  Filter berdasarkan nama, rumpun, keterampilan, atau minat RIASEC
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
+              {hasActiveFilter && (
+                <button
+                  type="button"
+                  onClick={resetFilters}
+                  className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors"
+                  style={{
+                    background: "var(--color-cream)",
+                    color: "var(--color-ink-soft)",
+                  }}
+                >
+                  Reset Filter
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => setFilterOpen((p) => !p)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors"
+                style={{
+                  background: filterOpen ? "var(--color-accent)" : "var(--color-cream)",
+                  color: filterOpen ? "#fff" : "var(--color-ink-soft)",
+                }}
+                aria-expanded={filterOpen}
+              >
+                <SlidersHorizontal className="w-3.5 h-3.5" aria-hidden="true" />
+                Filter Lanjutan
+                <ChevronDown
+                  className={`w-3.5 h-3.5 transition-transform ${filterOpen ? "rotate-180" : ""}`}
+                  aria-hidden="true"
+                />
+              </button>
+            </div>
+          </div>
+
+          {/* Search input */}
+          <div className="px-5 sm:px-7 py-5">
+            <div className="relative max-w-2xl">
+              <Search
+                className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2"
+                style={{ color: "var(--color-ink-soft)" }}
+                aria-hidden="true"
+              />
+              <label htmlFor="home-search-input" className="visually-hidden">
+                Nama profesi atau kata kunci
+              </label>
+              <input
+                id="home-search-input"
+                type="search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Cth: Dokter, Perawat, komunikasi, ibu hamil…"
+                className="w-full pl-11 pr-4 py-3 rounded-xl text-sm bg-[var(--color-cream)] focus:bg-white transition-colors"
+                style={{
+                  color: "var(--color-ink)",
+                  border: "1.5px solid transparent",
+                  outline: "none",
+                }}
+                onFocus={(e) => {
+                  e.target.style.border = "1.5px solid var(--color-accent)";
+                  e.target.style.boxShadow = "0 0 0 3px rgba(200,70,10,0.1)";
+                }}
+                onBlur={(e) => {
+                  e.target.style.border = "1.5px solid transparent";
+                  e.target.style.boxShadow = "none";
+                }}
+              />
+            </div>
+
+            {/* Result count */}
+            <p
+              aria-live="polite"
+              className="mt-3 text-xs font-medium"
+              style={{ color: "var(--color-ink-soft)" }}
+            >
+              Menampilkan{" "}
+              <strong className="text-[var(--color-ink)] font-bold">
+                {filteredProfessions.length}
+              </strong>{" "}
+              dari {professions.length} profesi dipublikasikan.
+            </p>
+          </div>
+
+          {/* Collapsible advanced filters */}
+          {filterOpen && (
+            <div
+              className="px-5 sm:px-7 pb-6 space-y-5 animate-slide-up"
+              style={{ borderTop: "1px solid rgba(26,22,18,0.06)" }}
+            >
+              <div className="pt-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Rumpun select */}
+                <div>
+                  <label
+                    htmlFor="home-rumpun-select"
+                    className="block text-xs font-bold uppercase tracking-wider mb-1.5"
+                    style={{ color: "var(--color-ink-soft)" }}
+                  >
+                    Rumpun Pekerjaan
+                  </label>
+                  <select
+                    id="home-rumpun-select"
+                    value={selectedRumpun}
+                    onChange={(e) => setSelectedRumpun(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-[var(--color-cream)] appearance-none cursor-pointer"
+                    style={{
+                      color: "var(--color-ink)",
+                      border: "1.5px solid rgba(26,22,18,0.1)",
+                    }}
+                  >
+                    <option value="all">Semua Rumpun Pekerjaan</option>
+                    {rumpunList.map((r) => (
+                      <option key={r.slug} value={r.slug}>
+                        {r.name}
+                        {countByRumpun[r.slug]
+                          ? ` (${countByRumpun[r.slug]} profesi)`
+                          : ""}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Keterampilan select */}
+                <div>
+                  <label
+                    htmlFor="home-skill-select"
+                    className="block text-xs font-bold uppercase tracking-wider mb-1.5"
+                    style={{ color: "var(--color-ink-soft)" }}
+                  >
+                    Kata Kunci Keterampilan
+                  </label>
+                  <select
+                    id="home-skill-select"
+                    value={selectedSkill}
+                    onChange={(e) => setSelectedSkill(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-[var(--color-cream)] appearance-none cursor-pointer"
+                    style={{
+                      color: "var(--color-ink)",
+                      border: "1.5px solid rgba(26,22,18,0.1)",
+                    }}
+                  >
+                    <option value="all">Semua Keterampilan</option>
+                    {STANDARD_SOFT_SKILLS.map((sk) => (
+                      <option key={sk} value={sk}>
+                        {sk}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* RIASEC filter chips */}
+              <div id="eksplorasi-riasec">
+                <div
+                  className="flex items-center gap-2 mb-3"
+                >
+                  <Compass className="w-4 h-4" style={{ color: "var(--color-accent)" }} aria-hidden="true" />
+                  <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-ink-soft)]">
+                    Filter Minat Aktivitas Kerja (Holland RIASEC)
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedRiasec("all")}
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                      selectedRiasec === "all"
+                        ? "text-white shadow-sm"
+                        : "hover:opacity-80"
+                    }`}
+                    style={{
+                      background: selectedRiasec === "all" ? "var(--color-ink)" : "var(--color-cream)",
+                      color: selectedRiasec === "all" ? "#fff" : "var(--color-ink-soft)",
+                    }}
+                  >
+                    Semua Tipe
+                  </button>
+                  {(Object.keys(RIASEC_DEFINITIONS) as RiasecCode[]).map((code) => {
+                    const info = RIASEC_DEFINITIONS[code];
+                    const active = selectedRiasec === code;
+                    return (
+                      <button
+                        key={code}
+                        type="button"
+                        onClick={() => setSelectedRiasec(active ? "all" : code)}
+                        aria-pressed={active}
+                        className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all ${
+                          active
+                            ? `${info.badgeSolid} border-transparent shadow-sm`
+                            : `${info.colorBg} ${info.colorText} ${info.colorBorder} hover:opacity-90`
+                        }`}
+                      >
+                        <span className="font-extrabold">{code}</span>
+                        <span>— {info.nameEn}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════
+          3.  PROFESSION CARDS GRID
+          ═══════════════════════════════════════════════════════ */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16 space-y-8">
+        {/* Section header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-blue-600 mb-1">
-              <Sparkles className="w-4 h-4" aria-hidden="true" />
-              <span>Katalog Kartu Profesi</span>
+            <div className="section-label">
+              <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
+              Katalog Kartu Profesi
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-              Profesi Pilihan & Seri Kartu Aktif
+            <h2
+              className="font-serif text-2xl sm:text-3xl font-semibold"
+              style={{ color: "var(--color-ink)" }}
+            >
+              {hasActiveFilter ? "Hasil Pencarian" : "Profesi Pilihan & Seri Kartu Aktif"}
             </h2>
-            <p className="text-sm sm:text-base text-slate-600 mt-1">
-              Setiap kartu dilengkapi ilustrasi, kode minat RIASEC, 3 soft skill
-              utama, dan halaman profil lengkap berbasis sumber resmi.
+            <p className="mt-1.5 text-sm text-[var(--color-ink-soft)] max-w-xl">
+              Setiap kartu dilengkapi ilustrasi, kode RIASEC, soft skill utama, dan
+              halaman profil lengkap berbasis referensi resmi Indonesia.
             </p>
           </div>
           <Link
             href="/profesi"
-            className="inline-flex items-center gap-1.5 text-sm font-bold text-blue-600 hover:text-blue-800"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold transition-colors shrink-0"
+            style={{ color: "var(--color-accent)" }}
           >
-            <span>Buka Halaman Eksplorasi Penuh</span>
+            Lihat Semua Profesi
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </Link>
         </div>
 
         {filteredProfessions.length === 0 ? (
-          <div className="bg-white rounded-3xl border border-slate-200 p-10 text-center space-y-4">
-            <p className="text-lg font-bold text-slate-800">
-              Tidak ada profesi yang cocok dengan kriteria pencarianmu.
+          <div
+            className="rounded-2xl p-12 text-center space-y-4"
+            style={{
+              background: "var(--color-cream)",
+              border: "1px solid rgba(26,22,18,0.07)",
+            }}
+          >
+            <p className="font-serif text-xl font-semibold text-[var(--color-ink)]">
+              Tidak ada profesi yang cocok.
             </p>
-            <p className="text-sm text-slate-600 max-w-md mx-auto">
-              Coba gunakan kata kunci yang lebih umum atau tampilkan kembali
-              semua rumpun pekerjaan.
+            <p className="text-sm text-[var(--color-ink-soft)] max-w-sm mx-auto">
+              Coba gunakan kata kunci lebih umum atau hapus filter aktif.
             </p>
             <button
               type="button"
-              onClick={() => {
-                setSearchQuery("");
-                setSelectedRumpun("all");
-                setSelectedSkill("all");
-                setSelectedRiasec("all");
-              }}
-              className="px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-bold hover:bg-blue-700"
+              onClick={resetFilters}
+              className="btn-primary text-sm py-2.5 px-5 mx-auto"
             >
               Tampilkan Semua Profesi
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
             {filteredProfessions.map((prof) => (
               <ProfessionCard key={prof.id} profession={prof} />
             ))}
@@ -480,44 +650,54 @@ export function HomeExplorerClient({
         )}
       </section>
 
-      {/* RECENTLY VIEWED OR FAVORITES BAR (IF ANY) */}
+      {/* ═══════════════════════════════════════════════════════
+          4.  RECENTLY VIEWED / FAVORITES
+          ═══════════════════════════════════════════════════════ */}
       {(recentProfessions.length > 0 || favorites.length > 0) && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-4">
+          <div
+            className="rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5"
+            style={{
+              background: "var(--color-ink)",
+              color: "#fff",
+            }}
+          >
             <div className="space-y-1">
-              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-400">
-                <Clock className="w-4 h-4" aria-hidden="true" />
-                <span>Jejak Eksplorasi Kamu di Perangkat Ini</span>
+              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest opacity-50">
+                <Clock className="w-3.5 h-3.5" aria-hidden="true" />
+                Eksplorasi Terakhir
               </div>
-              <h3 className="text-lg sm:text-xl font-extrabold">
-                Lanjutkan Membaca atau Kelola Profesi Favoritmu
+              <h3 className="font-serif text-lg font-semibold">
+                Lanjutkan membaca atau kelola favoritmu
               </h3>
-              <p className="text-xs sm:text-sm text-slate-300">
-                Disimpan secara lokal di perambanmu tanpa perlu membuat akun atau
-                mengisi data pribadi.
+              <p className="text-xs opacity-40">
+                Tersimpan di perangkat ini — tanpa akun, tanpa data pribadi.
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2.5">
+            <div className="flex flex-wrap items-center gap-2">
               {recentProfessions.map((rp) => (
                 <Link
                   key={rp.slug}
                   href={`/profesi/${rp.slug}`}
-                  className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs sm:text-sm font-semibold text-white border border-slate-700 transition-colors"
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold text-white transition-colors"
+                  style={{
+                    background: "rgba(255,255,255,0.08)",
+                    border: "1px solid rgba(255,255,255,0.1)",
+                  }}
                 >
-                  <span className="font-mono text-blue-400">
-                    #{rp.cardNumber}
-                  </span>
+                  <span className="font-mono opacity-50">#{rp.cardNumber}</span>
                   <span>{rp.name}</span>
                 </Link>
               ))}
               {favorites.length > 0 && (
                 <Link
                   href="/profesi?favorit=1"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-xs sm:text-sm font-bold text-white transition-colors"
+                  className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl font-bold text-xs text-white transition-all"
+                  style={{ background: "var(--color-accent)" }}
                 >
-                  <Bookmark className="w-4 h-4" aria-hidden="true" />
-                  <span>Lihat {favorites.length} Favorit</span>
+                  <Bookmark className="w-3.5 h-3.5" aria-hidden="true" />
+                  {favorites.length} Favorit
                 </Link>
               )}
             </div>
@@ -525,117 +705,173 @@ export function HomeExplorerClient({
         </section>
       )}
 
-      {/* 4. RUMPUN PEKERJAAN */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-          <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-indigo-600 mb-1">
-              <Compass className="w-4 h-4" aria-hidden="true" />
-              <span>10 Rumpun Karier Nasional</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-              Jelajahi Berdasarkan Rumpun Pekerjaan
-            </h2>
-            <p className="text-sm sm:text-base text-slate-600 mt-1 max-w-2xl">
-              Sistem Kartu Karier dirancang terbuka untuk berbagai bidang profesi
-              di Indonesia. Klik salah satu rumpun untuk melihat karakteristik
-              aktivitas kerja dan daftar profesinya.
-            </p>
-          </div>
-          <Link
-            href="/rumpun"
-            className="inline-flex items-center gap-1.5 text-sm font-bold text-indigo-600 hover:text-indigo-800"
-          >
-            <span>Lihat Semua Rumpun</span>
-            <ArrowRight className="w-4 h-4" aria-hidden="true" />
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-          {rumpunList.map((r) => {
-            const theme = getAccentTheme(r.accentColor);
-            const count = countByRumpun[r.slug] || 0;
-            return (
-              <Link
-                key={r.id}
-                href={`/rumpun/${r.slug}`}
-                className={`group flex flex-col justify-between p-5 rounded-2xl bg-white border-2 ${theme.borderSoft} hover:border-slate-300 shadow-sm hover:shadow-md transition-all`}
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div
-                      className={`w-11 h-11 rounded-xl ${theme.badgeBg} ${theme.textPrimary} flex items-center justify-center`}
-                    >
-                      <RumpunIcon name={r.iconName} className="w-6 h-6" />
-                    </div>
-                    <span
-                      className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${
-                        count > 0
-                          ? `${theme.badgeBg} ${theme.badgeText}`
-                          : "bg-slate-100 text-slate-600"
-                      }`}
-                    >
-                      {count > 0 ? `${count} Profesi` : "Siap Dikembangkan"}
-                    </span>
-                  </div>
-                  <h3 className="font-extrabold text-base text-slate-900 group-hover:text-blue-700 transition-colors">
-                    {r.name}
-                  </h3>
-                  <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">
-                    {r.shortDescription}
-                  </p>
-                </div>
-
-                <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-700 group-hover:text-blue-600">
-                  <span>Buka Rumpun</span>
-                  <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* 5. AJAKAN EKSPLORASI & BANDINGKAN PROFESI */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-3xl bg-gradient-to-br from-indigo-600 via-blue-700 to-slate-900 text-white p-8 sm:p-12 shadow-xl">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-8 space-y-4">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-xs font-bold uppercase tracking-wider">
-                <Scale className="w-4 h-4 text-amber-300" aria-hidden="true" />
-                <span>Fitur Perbandingan Karier Siswa</span>
+      {/* ═══════════════════════════════════════════════════════
+          5.  RUMPUN PEKERJAAN GRID
+          ═══════════════════════════════════════════════════════ */}
+      <section
+        className="py-14 sm:py-20"
+        style={{ background: "var(--color-cream)" }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div>
+              <div className="section-label">
+                <Compass className="w-3.5 h-3.5" aria-hidden="true" />
+                10 Rumpun Karier Nasional
               </div>
-              <h2 className="text-2xl sm:text-4xl font-extrabold leading-tight">
-                Bingung Memilih di Antara Beberapa Profesi? Bandingkan Secara
-                Berdampingan!
+              <h2
+                className="font-serif text-2xl sm:text-3xl font-semibold"
+                style={{ color: "var(--color-ink)" }}
+              >
+                Jelajahi Berdasarkan Rumpun Pekerjaan
               </h2>
-              <p className="text-sm sm:text-base text-blue-100 leading-relaxed max-w-2xl">
-                Kamu bisa memilih dua hingga tiga profesi sekaligus (misalnya{" "}
-                <strong>Dokter</strong>, <strong>Perawat</strong>, dan{" "}
-                <strong>Apoteker</strong>) untuk membandingkan kecenderungan
-                minat RIASEC, aktivitas harian, jenjang pendidikan di Indonesia,
-                serta keterampilan yang dibutuhkan.
+              <p className="mt-1.5 text-sm text-[var(--color-ink-soft)] max-w-xl">
+                Sistem terbuka untuk berbagai bidang profesi di Indonesia.
+                Klik salah satu rumpun untuk melihat karakteristik dan daftar profesinya.
               </p>
             </div>
-            <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-3">
-              <Link
-                href="/bandingkan"
-                className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-white text-blue-900 hover:bg-blue-50 font-extrabold text-sm sm:text-base shadow-lg transition-all"
-              >
-                <Scale className="w-5 h-5 text-blue-700" aria-hidden="true" />
-                <span>Bandingkan Profesi Sekarang</span>
-              </Link>
-              <Link
-                href="/tentang"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-sm transition-all"
-              >
-                <span>Pelajari Cara Kerja Kartu & RIASEC</span>
-              </Link>
-            </div>
+            <Link
+              href="/rumpun"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold transition-colors shrink-0"
+              style={{ color: "var(--color-accent)" }}
+            >
+              Lihat Semua Rumpun
+              <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            </Link>
+          </div>
+
+          {/* Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+            {rumpunList.map((r) => {
+              const theme = getAccentTheme(r.accentColor);
+              const count = countByRumpun[r.slug] || 0;
+              return (
+                <Link
+                  key={r.id}
+                  href={`/rumpun/${r.slug}`}
+                  className="rumpun-card group flex flex-col bg-white rounded-2xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all"
+                  style={{
+                    border: "1px solid rgba(26,22,18,0.07)",
+                    color: theme.hexPrimary,
+                  }}
+                >
+                  {/* Icon */}
+                  <div
+                    className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center mb-3 transition-colors"
+                    style={{
+                      background: `${theme.hexPrimary}15`,
+                    }}
+                  >
+                    <RumpunIcon name={r.iconName} className="w-5 h-5 sm:w-6 sm:h-6" />
+                  </div>
+
+                  {/* Name */}
+                  <h3
+                    className="font-semibold text-sm sm:text-base leading-tight mb-1"
+                    style={{ color: "var(--color-ink)" }}
+                  >
+                    {r.name}
+                  </h3>
+
+                  {/* Count */}
+                  <span
+                    className="text-[11px] font-bold mt-auto pt-2"
+                    style={{ color: count > 0 ? theme.hexPrimary : "var(--color-ink-soft)", opacity: 0.7 }}
+                  >
+                    {count > 0 ? `${count} Profesi` : "Siap Dikembangkan"}
+                  </span>
+
+                  {/* Hover arrow */}
+                  <div
+                    className="flex items-center gap-1 text-[11px] font-semibold mt-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                    style={{ color: theme.hexPrimary }}
+                  >
+                    Jelajahi
+                    <ArrowRight className="w-3 h-3" aria-hidden="true" />
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
+
+      {/* ═══════════════════════════════════════════════════════
+          6.  CTA SECTION — Compare + About
+          ═══════════════════════════════════════════════════════ */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+          {/* Compare CTA card */}
+          <div
+            className="rounded-2xl p-8 flex flex-col justify-between gap-6"
+            style={{
+              background: "var(--color-ink)",
+              color: "#fff",
+              minHeight: "280px",
+            }}
+          >
+            <div>
+              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest opacity-40 mb-4">
+                <Scale className="w-3.5 h-3.5" aria-hidden="true" />
+                Fitur Perbandingan
+              </div>
+              <h2
+                className="font-serif text-2xl sm:text-3xl font-semibold leading-tight"
+              >
+                Bingung memilih antara beberapa profesi?
+              </h2>
+              <p className="mt-3 text-sm opacity-55 leading-relaxed">
+                Bandingkan minat RIASEC, aktivitas harian, jenjang pendidikan,
+                dan keterampilan dua hingga tiga profesi secara berdampingan.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Link href="/bandingkan" className="btn-primary">
+                <Scale className="w-4 h-4" aria-hidden="true" />
+                Bandingkan Sekarang
+              </Link>
+              <Link href="/tentang" className="btn-ghost text-sm">
+                Pelajari RIASEC
+              </Link>
+            </div>
+          </div>
+
+          {/* RIASEC info card */}
+          <div
+            className="rounded-2xl p-8 flex flex-col justify-between gap-6"
+            style={{
+              background: "var(--color-teal-brand)",
+              color: "#fff",
+              minHeight: "280px",
+            }}
+          >
+            <div>
+              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest opacity-50 mb-4">
+                <Compass className="w-3.5 h-3.5" aria-hidden="true" />
+                Holland RIASEC
+              </div>
+              <h2 className="font-serif text-2xl sm:text-3xl font-semibold leading-tight">
+                Kenali minat kerja dan tipe aktivitasmu
+              </h2>
+              <p className="mt-3 text-sm opacity-60 leading-relaxed">
+                Teori Holland membagi minat aktivitas kerja ke dalam enam tipe —
+                R, I, A, S, E, C. Temukan profesi yang sesuai kecenderunganmu.
+              </p>
+            </div>
+            <Link
+              href="/tentang#riasec"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-white/80 hover:text-white transition-colors"
+            >
+              Pelajari Panduan RIASEC
+              <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            </Link>
+          </div>
+
+        </div>
+      </section>
+
     </div>
   );
 }
-
